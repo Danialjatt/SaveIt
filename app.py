@@ -6,7 +6,8 @@ from image_compressor import (compress_image, decompress_image,
                               smart_decompress, detect_saveit_version)
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
+# Use /tmp for uploads to support Vercel's read-only serverless environment
+app.config['UPLOAD_FOLDER'] = '/tmp/uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 @app.route('/')
