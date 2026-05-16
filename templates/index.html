@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaveIt - Lossless Image Compression</title>
+    <meta name="description" content="SaveIt: Lossless image compression with pixel-perfect recovery. Upload any image, compress it to save memory, and decompress to get back the exact original.">
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>SaveIt</h1>
+            <p>Lossless Image Compression — Pixel-Perfect Recovery</p>
+        </header>
+
+        <main>
+            <div class="panel controls">
+                <div class="tabs">
+                    <button class="tab active" id="tab-lossless" onclick="switchMode('lossless')">🔒 Lossless Compress</button>
+                    <button class="tab" id="tab-neural" onclick="switchMode('neural')">🧠 Neural Compress</button>
+                    <button class="tab" id="tab-decompress" onclick="switchMode('decompress')">📂 Decompress</button>
+                </div>
+
+                <!-- LOSSLESS COMPRESS -->
+                <div id="lossless-view" class="view active">
+                    <div class="mode-badge lossless-badge">
+                        <span>🔒</span> Pixel-Perfect — Original quality guaranteed on decompress
+                    </div>
+                    <div class="upload-area" id="upload-lossless" onclick="document.getElementById('file-lossless').click()">
+                        <span id="lossless-filename">Click or Drag Image Here</span>
+                        <input type="file" id="file-lossless" accept="image/*" hidden>
+                    </div>
+                    <button class="action-btn" id="btn-lossless">🔒 Lossless Compress & Download</button>
+                </div>
+
+                <!-- NEURAL COMPRESS (autoencoder — lossy) -->
+                <div id="neural-view" class="view">
+                    <div class="mode-badge neural-badge">
+                        <span>🧠</span> Neural Network — Higher compression ratio, approximate reconstruction
+                    </div>
+                    <div class="upload-area" id="upload-compress" onclick="document.getElementById('file-compress').click()">
+                        <span id="compress-filename">Click or Drag Image Here</span>
+                        <input type="file" id="file-compress" accept="image/*" hidden>
+                    </div>
+
+                    <div class="settings">
+                        <label>
+                            Epochs (Training Time)
+                            <input type="range" id="epochs" min="1" max="50" value="10" oninput="this.nextElementSibling.value = this.value">
+                            <output>10</output>
+                        </label>
+                        <label>
+                            Bottleneck Size (Quality)
+                            <input type="range" id="bottleneck" min="8" max="256" value="64" oninput="this.nextElementSibling.value = this.value">
+                            <output>64</output>
+                        </label>
+                    </div>
+                    
+                    <button class="action-btn" id="btn-compress">🧠 Neural Compress & Download</button>
+                </div>
+
+                <!-- DECOMPRESS -->
+                <div id="decompress-view" class="view">
+                    <div class="mode-badge decompress-badge">
+                        <span>📂</span> Auto-detects format — v2 (lossless) or v1 (neural)
+                    </div>
+                    <div class="upload-area" id="upload-decompress" onclick="document.getElementById('file-decompress').click()">
+                        <span id="decompress-filename">Click or Drag .saveit File Here</span>
+                        <input type="file" id="file-decompress" accept=".saveit" hidden>
+                    </div>
+                    
+                    <button class="action-btn" id="btn-decompress">📂 Decompress & View</button>
+                </div>
+                
+                <div id="loading" class="hidden">
+                    <div class="spinner"></div>
+                    <p>Processing...</p>
+                </div>
+
+                <!-- Stats bar -->
+                <div id="stats-bar" class="stats-bar hidden">
+                    <div class="stat">
+                        <span class="stat-label">Original</span>
+                        <span class="stat-value" id="stat-original">—</span>
+                    </div>
+                    <div class="stat-arrow">→</div>
+                    <div class="stat">
+                        <span class="stat-label">Compressed</span>
+                        <span class="stat-value" id="stat-compressed">—</span>
+                    </div>
+                    <div class="stat-arrow">|</div>
+                    <div class="stat">
+                        <span class="stat-label">Saved</span>
+                        <span class="stat-value stat-highlight" id="stat-saved">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel comparison">
+                <div class="comparison-slider hidden" id="comparison">
+                    <img id="img-original" src="" alt="Original">
+                    <div class="resize" id="resize">
+                        <img id="img-restored" src="" alt="Restored">
+                    </div>
+                    <div class="handle" id="handle"></div>
+                </div>
+                <div class="placeholder" id="placeholder">
+                    <h2>Upload a file to see results</h2>
+                    <p>Lossless mode guarantees pixel-perfect recovery</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/static/main.js"></script>
+</body>
+</html>
